@@ -1,4 +1,10 @@
-.table-one_user td,
-.table-all_users td {
-    width: 20%;
+@import url('https://fonts.googleapis.com/css2?family=Chivo+Mono&display=swap');
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Chivo Mono', monospace;
+}
+
+.btn {
+    font-family: 'Chivo Mono', monospace;
+    text-transform: uppercase;
 }

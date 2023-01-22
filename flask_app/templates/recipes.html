@@ -14,7 +14,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-6 text-center text-md-start">
-                        <a href="#" class="btn btn-primary">Add Recipe</a>
+                        <a href="/add" class="btn btn-primary">Add Recipe</a>
                     </div>
                     <div class="col-6 text-center text-md-end">
                         <a href="/logout" class="btn btn-secondary">Logout</a>
@@ -36,14 +36,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- ! this eventually needs to change and pull recipes, not users -->
-                    {% for user in users %}
+                    {% for recipe in recipes %}
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td>{{ user.first_name }} {{ user.last_name }}</td>
-                        <!-- <td>{{ user.created_at.strftime("%m/%d/%y, %I:%M%p") }}</td> -->
-                        <td><a href="/view/user/">View</a> | <a href="/delete/user/">Delete</a> | <a href="/update/user/">Update</a></td>
+                        <td>{{ recipe.name }}</td>
+                        <td>{{ recipe.under_thirty }}</td>
+                        <td>{{ recipe.user.first_name }}</td>
+                        <td><a href="/view/{{ recipe.id }}">View</a> | <a href="/delete/">Delete</a> | <a href="/update/">Update</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

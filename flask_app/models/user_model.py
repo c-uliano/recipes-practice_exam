@@ -1,5 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash, request
+from flask_app.models import recipe_model
 import re
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
@@ -13,6 +14,7 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        # self.recipes = []
 
 
 
@@ -37,7 +39,10 @@ class User:
     # CREATE new user, add form data to database
     @classmethod
     def save(cls, data):
-        query = "INSERT INTO users (first_name, last_name, email, password) VALUES (%(first_name)s, %(last_name)s, %(email)s, %(password)s);"
+        query = """
+        INSERT INTO users (first_name, last_name, email, password) 
+        VALUES (%(first_name)s, %(last_name)s, %(email)s, %(password)s);
+        """
 
         return connectToMySQL("recipes_schema").query_db(query, data)
 # ? --------------------------------------
@@ -52,6 +57,41 @@ class User:
         result = connectToMySQL("recipes_schema").query_db(query, data)
 
         return cls(result[0]) if result else None
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
+    # READ one user and all it's recipes
+    # ! this isn't going to give me what I need
+    # @classmethod
+    # def get_user_by_recipe(cls, data):
+    #     query = """
+    #         SELECT * FROM users 
+    #         LEFT JOIN recipes ON user.id = recipes.user 
+    #         WHERE users.id = %(id)s;
+    #     """
+
+    #     result = connectToMySQL("dojos_and_ninjas_schema").query_db(query, data)
+
+    #     user = cls(result[0])
+
+        # for row in result:
+            # * every recipe object belonging to one user object
+        #     data = {
+        #         "id": row['recipes.id'],
+        #         "name": row['name'],
+        #         "description": row['description'],
+        #         "instructions": row['instructions'],
+        #         "date": row['date'],
+        #         "under_thirty": row['under_thirty'],
+        #         "created_at": row['recipes.created_at'],
+        #         "updated_at": row['recipes.updated_at']
+        #     }
+        #     user.recipes.append(recipe_model.Recipe(data))
+        
+        # print(user)
+        # return(user)
 # ? --------------------------------------
 
 

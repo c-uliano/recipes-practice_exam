@@ -1,6 +1,7 @@
 from flask_app import app
 from flask import render_template, redirect, request, flash, session
 from flask_app.models import user_model
+# from flask_app.controllers import recipes_controller
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
@@ -42,7 +43,7 @@ def register():
 
 
 # ? --------------------------------------
-# READ user by email, redirect to success page
+# READ user by email, redirect to recipes page
 @app.route('/login', methods=['POST']) 
 def login():
     data = { 
@@ -67,19 +68,20 @@ def login():
 
 
 # ? --------------------------------------
-# redirect successful registration to success page
-@app.route('/recipes') 
-def to_recipes_page():
+# recipes page, moved to recipes_controller
+# @app.route('/recipes') 
+# def to_recipes_page():
 
     # this is working just fine now, at http://127.0.0.1:5000/ on Firefox. No clue what was going on with previous assignment
-    if 'user_id' not in session:
-        return redirect('/')
+    # to stop someone from typing /recipes if they are not logged in
+    # if 'user_id' not in session:
+    #     return redirect('/')
 
     # never tested, but does this work like the above code?
     # if not session['user_id']:
     #     return redirect('/')
 
-    return render_template("recipes.html", users = user_model.User.get_all()) 
+    # return render_template("recipes.html", users = user_model.User.get_all()) 
 # ? --------------------------------------
 
 

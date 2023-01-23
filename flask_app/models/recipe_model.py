@@ -2,6 +2,8 @@ from flask_app.config.mysqlconnection import connectToMySQL
 from flask import request, flash
 from flask_app.models import user_model
 
+database = "recipes_schema"
+
 class Recipe:
     def __init__(self, data):
         self.id = data['id']
@@ -19,11 +21,11 @@ class Recipe:
 
 
 # ? --------------------------------------
-    # READ all users, display on frontend
+    # READ all recipes, display on frontend
     @classmethod
     def get_all(cls):
         query = "SELECT * FROM recipes LEFT JOIN users ON users.id = recipes.user_id;"
-        results = connectToMySQL("recipes_schema").query_db(query)
+        results = connectToMySQL(database).query_db(query)
 
         recipes = []
 
@@ -60,7 +62,7 @@ class Recipe:
         VALUES (%(user_id)s, %(name)s, %(description)s, %(instructions)s, %(date)s, %(under_thirty)s);
         """
 
-        return connectToMySQL("recipes_schema").query_db(query, data)
+        return connectToMySQL(database).query_db(query, data)
 # ? --------------------------------------
 
 
@@ -76,7 +78,7 @@ class Recipe:
             WHERE recipes.id = %(id)s;
         """
 
-        result = connectToMySQL("recipes_schema").query_db(query, data)
+        result = connectToMySQL(database).query_db(query, data)
 
         recipe = cls(result[0])
 
@@ -114,7 +116,7 @@ class Recipe:
         WHERE id = %(id)s;
         """
 
-        return connectToMySQL('recipes_schema').query_db(query, data)
+        return connectToMySQL(database).query_db(query, data)
 # ? --------------------------------------
 
 
@@ -125,7 +127,7 @@ class Recipe:
     def delete(cls, data):
         query = "DELETE FROM recipes WHERE id = %(id)s;"
 
-        return connectToMySQL('recipes_schema').query_db(query, data)
+        return connectToMySQL(database).query_db(query, data)
 # ? --------------------------------------
 
 

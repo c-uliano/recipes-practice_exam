@@ -9,6 +9,7 @@ from flask_app.models import user_model, recipe_model
 def to_recipes_page():
 
     # this is working just fine now, at http://127.0.0.1:5000/ on Firefox. No clue what was going on with previous assignment
+    # * using the debugger to start/stop the server is what was causing this weirdness. Doing pipenv shell and python3 server.py in the terminal has no problem
     # to stop someone from typing /recipes if they are not logged in
     if 'user_id' not in session:
         return redirect('/')
@@ -85,6 +86,7 @@ def uppdate_form(id):
 
 # ? --------------------------------------
 # UPDATE one recipe
+# ! if I put a hidden input in the update.html for the recipe id could I remove /<int:id> from this route? Redirects useing request.form['recipe_id']. Although that wouldn't work for line 92, redirecting if validation failed
 @app.route('/update/<int:id>', methods=['POST']) 
 def update(id):
     if not recipe_model.Recipe.validate(request.form):

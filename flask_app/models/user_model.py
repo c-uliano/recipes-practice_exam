@@ -5,6 +5,8 @@ import re
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
+database = "recipes_schema"
+
 class User:
     def __init__(self, data):
         self.id = data['id']
@@ -18,23 +20,6 @@ class User:
 
 
 # ? --------------------------------------
-    # READ all users, display on frontend
-    @classmethod
-    def get_all(cls):
-        query = "SELECT * FROM users;"
-        results = connectToMySQL("recipes_schema").query_db(query)
-
-        users = []
-
-        for user in results:
-            users.append(cls(user))
-        
-        return users
-# ? --------------------------------------
-
-
-
-# ? --------------------------------------
     # CREATE new user, add form data to database
     @classmethod
     def save(cls, data):
@@ -43,7 +28,7 @@ class User:
         VALUES (%(first_name)s, %(last_name)s, %(email)s, %(password)s);
         """
 
-        return connectToMySQL("recipes_schema").query_db(query, data)
+        return connectToMySQL(database).query_db(query, data)
 # ? --------------------------------------
 
 
@@ -53,7 +38,7 @@ class User:
     @classmethod
     def get_by_email(cls, data):
         query = "SELECT * FROM users WHERE email = %(email)s;"
-        result = connectToMySQL("recipes_schema").query_db(query, data)
+        result = connectToMySQL(database).query_db(query, data)
 
         return cls(result[0]) if result else None
 # ? --------------------------------------
@@ -130,6 +115,24 @@ class User:
         
         # print(user)
         # return(user)
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
+    # ! can probably delete, don't need to display all the users anywhere for this assignment
+    # READ all users, display on frontend
+    # @classmethod
+    # def get_all(cls):
+    #     query = "SELECT * FROM users;"
+    #     results = connectToMySQL(database).query_db(query)
+
+    #     users = []
+
+    #     for user in results:
+    #         users.append(cls(user))
+        
+    #     return users
 # ? --------------------------------------
 
 

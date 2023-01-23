@@ -1,5 +1,5 @@
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask import request
+from flask import request, flash
 from flask_app.models import user_model
 
 class Recipe:
@@ -28,7 +28,7 @@ class Recipe:
         recipes = []
 
         for row in results:
-            # * make each recipe object
+            # * iterate & make each recipe object
             recipe = cls(row)
             # * user object
             data = {
@@ -66,34 +66,9 @@ class Recipe:
 
 
 # ? --------------------------------------
-# ! probably don't need this here
-# READ one user by email address
-    # @classmethod
-    # def get_by_email(cls, data):
-    #     query = "SELECT * FROM recipes WHERE email = %(email)s;"
-    #     result = connectToMySQL("recipes_schema").query_db(query, data)
-
-    #     return cls(result[0]) if result else None
-# ? --------------------------------------
-
-
-
-# ? --------------------------------------
-    # READ one user by id, show on frontend
-    # ! replacing this with below method
-    # @classmethod
-    # def get_one(cls, data):
-    #     query  = "SELECT * FROM recipes WHERE id = %(id)s;" 
-    #     result = connectToMySQL('recipes_schema').query_db(query, data)
-
-    #     return cls(result[0]) 
-# ? --------------------------------------
-
-
-
-# ? --------------------------------------
     # READ one recipe and it's user
     @classmethod
+    # maybe rename this to just get_by_email? On the other hand, I like the descritiveness
     def recipe_by_id_with_user(cls, data):
         query = """
             SELECT * FROM recipes 
@@ -125,24 +100,87 @@ class Recipe:
 
 
 # ? --------------------------------------
-# ! can probably delete, don't need to update user info for this assignment
     # UPDATE user with form data
-    # @classmethod
-    # def update_one(cls, data):
-    #     query  = "UPDATE users SET first_name = %(fname)s, last_name = %(lname)s, email = %(email)s, updated_at = NOW() WHERE id = %(id)s;" 
+    @classmethod
+    def update(cls, data):
+        query  = """
+        UPDATE recipes 
+        SET 
+        name = %(name)s, 
+        description = %(description)s, 
+        instructions = %(instructions)s, 
+        date = %(date)s, 
+        under_thirty = %(under_thirty)s  
+        WHERE id = %(id)s;
+        """
 
-    #     return connectToMySQL('recipes_schema').query_db(query, data)
+        return connectToMySQL('recipes_schema').query_db(query, data)
 # ? --------------------------------------
 
 
 
 # ? --------------------------------------
-# ! can probably delete, don't need to delete a user for this assignment
     # DELETE user
-    # @classmethod
-    # def remove_one(cls, data):
-    #     query = "DELETE FROM users WHERE id = %(id)s;"
+    @classmethod
+    def delete(cls, data):
+        query = "DELETE FROM recipes WHERE id = %(id)s;"
 
-    #     return connectToMySQL('recipes_schema').query_db(query, data)
+        return connectToMySQL('recipes_schema').query_db(query, data)
 # ? --------------------------------------
 
+
+
+# ? --------------------------------------
+    # user validation
+    @staticmethod
+    def validate(data):
+        is_valid = True
+
+        if len(data['name']) < 2:
+            flash("Name must be at least 2 characters.", "recipe")
+            is_valid = False
+
+        if len(data['description']) < 2:
+            flash("Description must be at least 2 characters.", "recipe")
+            is_valid = False
+
+        if len(data['instructions']) < 2:
+            flash("Instructions must be at least 2 characters.", "recipe")
+            is_valid = False
+
+        if data['date'] == '':
+            flash("Date must be added", "recipe")
+            is_valid = False
+
+        if 'under_thirty' not in data:
+            flash("Is it under 30 minutes? Pick yes or no", "recipe")
+            is_valid = False
+
+        return is_valid
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
+# ! probably don't need this here
+# READ one user by email address
+    # @classmethod
+    # def get_by_email(cls, data):
+    #     query = "SELECT * FROM recipes WHERE email = %(email)s;"
+    #     result = connectToMySQL("recipes_schema").query_db(query, data)
+
+    #     return cls(result[0]) if result else None
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
+    # READ one user by id, show on frontend
+    # ! replacing this with below method
+    # @classmethod
+    # def get_one(cls, data):
+    #     query  = "SELECT * FROM recipes WHERE id = %(id)s;" 
+    #     result = connectToMySQL('recipes_schema').query_db(query, data)
+
+    #     return cls(result[0]) 
+# ? --------------------------------------

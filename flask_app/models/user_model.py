@@ -14,7 +14,6 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
-        # self.recipes = []
 
 
 
@@ -62,41 +61,6 @@ class User:
 
 
 # ? --------------------------------------
-    # READ one user and all it's recipes
-    # ! this isn't going to give me what I need
-    # @classmethod
-    # def get_user_by_recipe(cls, data):
-    #     query = """
-    #         SELECT * FROM users 
-    #         LEFT JOIN recipes ON user.id = recipes.user 
-    #         WHERE users.id = %(id)s;
-    #     """
-
-    #     result = connectToMySQL("dojos_and_ninjas_schema").query_db(query, data)
-
-    #     user = cls(result[0])
-
-        # for row in result:
-            # * every recipe object belonging to one user object
-        #     data = {
-        #         "id": row['recipes.id'],
-        #         "name": row['name'],
-        #         "description": row['description'],
-        #         "instructions": row['instructions'],
-        #         "date": row['date'],
-        #         "under_thirty": row['under_thirty'],
-        #         "created_at": row['recipes.created_at'],
-        #         "updated_at": row['recipes.updated_at']
-        #     }
-        #     user.recipes.append(recipe_model.Recipe(data))
-        
-        # print(user)
-        # return(user)
-# ? --------------------------------------
-
-
-
-# ? --------------------------------------
     # user validation & regex
     @staticmethod
     def registration(data):
@@ -136,7 +100,42 @@ class User:
 
 
 # ? --------------------------------------
-# ! can probably delete, don't need to get and display just one user for this assignment
+    # READ one user and all it's recipes
+    # ! this isn't going to give me what I need. Need to pick one recipe and it's one user
+    # @classmethod
+    # def get_user_by_recipe(cls, data):
+    #     query = """
+    #         SELECT * FROM users 
+    #         LEFT JOIN recipes ON user.id = recipes.user 
+    #         WHERE users.id = %(id)s;
+    #     """
+
+    #     result = connectToMySQL("dojos_and_ninjas_schema").query_db(query, data)
+
+    #     user = cls(result[0])
+
+        # for row in result:
+            # * every recipe object belonging to one user object
+        #     data = {
+        #         "id": row['recipes.id'],
+        #         "name": row['name'],
+        #         "description": row['description'],
+        #         "instructions": row['instructions'],
+        #         "date": row['date'],
+        #         "under_thirty": row['under_thirty'],
+        #         "created_at": row['recipes.created_at'],
+        #         "updated_at": row['recipes.updated_at']
+        #     }
+        #     user.recipes.append(recipe_model.Recipe(data))
+        
+        # print(user)
+        # return(user)
+# ? --------------------------------------
+
+
+
+# ? --------------------------------------
+# ! can probably delete, don't need to get a user by id, getting by email instead
     # READ one user by id, show on frontend
     # @classmethod
     # def get_one(cls, data):
@@ -162,6 +161,7 @@ class User:
 
 # ? --------------------------------------
 # ! can probably delete, don't need to delete a user for this assignment
+# ! but, if you did delete a user, what happens to the recipes associated with that user? Do they also get deleted?
     # DELETE user
     # @classmethod
     # def remove_one(cls, data):

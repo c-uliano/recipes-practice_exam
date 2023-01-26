@@ -32,10 +32,15 @@ def register():
     user_model.User.save(data)
 
     # need this to redirect to /recipes or else it just reloads the homepage because of the if statement in the /recipes route, and because there was no session saved. Can't save session without pulling the user. Can't pull user info when user is just being created, have to create then call.
-    user = user_model.User.get_by_email({"email": request.form['email']})
-    session['user_id'] = user.id
-    # to show user's name on the recipe page after they register
-    session['first_name'] = user.first_name
+    # ! nope, I was wrong, in this particular route you can just set the sessions from the form, i.e. session['user_email'] = request.form['email'] (using whatever data is in the form). So you don't need to pull the user from the database this way.
+    # user = user_model.User.get_by_email({"email": request.form['email']})
+    # session['user_id'] = user.id
+    # * to show user's name on the recipe page after they register
+    # session['first_name'] = user.first_name
+
+    # the session to track a user, maybe it should just be called session['user'] since sometimes I'm tracking by email and sometimes by id
+    session['user_id'] = request.form['email']
+    session['first_name'] = request.form['first_name']
 
     return redirect('/recipes') 
 # ? --------------------------------------
